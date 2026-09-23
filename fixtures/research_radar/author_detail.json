@@ -1,0 +1,8 @@
+{
+  "demo_fixture": true,
+  "authors": {
+    "a1": {"research_note": "Demo profile used to exercise multi-affiliation rendering."},
+    "a5": {"research_note": "Demo profile used to exercise collaborator navigation."},
+    "a10": {"research_note": "Demo profile intentionally has no institution."}
+  }
+}

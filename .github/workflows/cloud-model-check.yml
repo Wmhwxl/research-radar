@@ -1,0 +1,60 @@
+name: Verify cloud-only workflows
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/cloud-model-check.yml'
+      - '.github/workflows/daily-paper-reader.yml'
+      - '.github/workflows/conference-paper-retrieval.yml'
+      - '.github/workflows/starter-pack.yml'
+      - '.github/workflows/topic-research.yml'
+      - 'src/model_loader.py'
+      - 'src/long_range_review.py'
+      - 'src/starter_pack*.py'
+      - 'src/topic_*.py'
+      - 'app/topic-*.js'
+      - 'tests/test_topic*'
+      - 'src/paper_dates.py'
+      - 'src/paper_dedupe.py'
+      - 'src/3.rank_papers.py'
+      - 'scripts/check_cloud_models.py'
+      - 'scripts/request_pages_build.py'
+      - 'requirements.txt'
+      - 'tests/test_cloud_models.py'
+      - 'tests/test_starter_pack*'
+      - 'tests/test_paper_dates.py'
+      - 'tests/test_paper_dedupe.py'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install lightweight runtime and tests
+        run: python -m pip install -r requirements.txt pytest pytest-subtests
+      - name: Python regression in clean environment
+        run: timeout 60 python -m pytest -q
+      - name: JavaScript regression
+        run: |
+          set -euo pipefail
+          for test in tests/test_*.js; do
+            timeout 60 node "$test"
+          done
+      - name: Real cloud embedding and reranker smoke
+        env:
+          DPR_MODELS_REMOTE_ONLY: '1'
+          DPR_EMBED_ALLOW_LOCAL_FALLBACK: '0'
+          DPR_EMBED_API_URL: ${{ secrets.DPR_EMBED_API_URL || 'https://zwwen.online/embed' }}
+          DPR_EMBED_API_KEY: ${{ secrets.DPR_EMBED_API_KEY }}
+          RERANK_PROFILE: public-zwwen-rerank
+          PUBLIC_RERANK_API_BASE_URL: ${{ secrets.PUBLIC_RERANK_API_BASE_URL || 'https://zwwen.online/rerank' }}
+          PUBLIC_RERANK_API_KEY: ${{ secrets.PUBLIC_RERANK_API_KEY }}
+        run: python scripts/check_cloud_models.py --require-lightweight

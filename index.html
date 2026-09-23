@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Paper Reader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum=1.0">
+  <!-- 初始引用信息，具体论文信息会由 Docsify 插件在运行时覆盖 -->
+  <meta name="citation_journal_title" content="Daily Paper Reader (ArXiv)">
+  <meta name="citation_title" content="Daily Paper Reader Default Entry">
+  <meta name="citation_author" content="Daily Paper Reader Team">
+  <meta name="citation_author" content="Docsify Renderer">
+  <meta name="citation_date" content="2024/01/01">
+  <meta name="citation_pdf_url" content="https://daily-paper-reader.invalid/default.pdf">
+  <meta name="citation_volume" content="1">
+  <meta name="citation_issue" content="1">
+  <meta name="citation_firstpage" content="100">
+  <meta name="citation_lastpage" content="110">
+
+  <!-- 网站图标：图标保持本仓库相对路径，避免 CDN 不可用时影响首屏。 -->
+  <link rel="icon" type="image/png" href="app/asserts/icon.png">
+
+  <style>
+    #secret-gate-overlay.secret-gate-hidden {
+      display: none !important;
+    }
+
+    html body div#app:empty {
+      display: none !important;
+    }
+
+    html body div#app:empty::before {
+      content: none !important;
+    }
+
+    html body div#app[data-dpr-pending] {
+      display: none !important;
+      margin: 0 !important;
+      font-size: 0 !important;
+    }
+
+    html body div#app[data-dpr-pending]::before {
+      content: none !important;
+    }
+
+    .dpr-initial-loading {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      padding: 32px;
+      color: #334155;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f8fafc;
+    }
+
+    .dpr-initial-loading[hidden] {
+      display: none !important;
+    }
+
+    .dpr-initial-error {
+      width: min(460px, calc(100vw - 40px));
+      margin: 15vh auto 0;
+      padding: 20px;
+      box-sizing: border-box;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      background: #fff;
+      color: #334155;
+      box-shadow: 0 16px 42px rgba(15, 23, 42, 0.12);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .dpr-initial-error-title {
+      margin-bottom: 8px;
+      color: #991b1b;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .dpr-initial-error-detail {
+      margin-bottom: 14px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .dpr-initial-error-retry {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 7px 12px;
+      background: #f8fafc;
+      color: #1e293b;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .dpr-initial-loading-card {
+      width: min(420px, 92vw);
+      box-sizing: border-box;
+      padding: 22px 26px;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      text-align: center;
+    }
+
+    .dpr-initial-loading-mark {
+      width: 58px;
+      height: 34px;
+      margin: 0 auto 12px;
+      border-radius: 12px;
+      background: #fca7d0;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .dpr-initial-loading-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .dpr-initial-loading-subtitle {
+      margin-top: 6px;
+      color: #64748b;
+      font-size: 12px;
+    }
+  </style>
+
+  <script>
+    window.DPRHideInitialSplash = function () {
+      var splash = document.getElementById('dpr-initial-splash');
+      if (splash) {
+        splash.hidden = true;
+      }
+    };
+    window.DPRShowInitialLoadError = function (error) {
+      var app = document.getElementById('app');
+      var secretGate = document.getElementById('secret-gate-overlay');
+      window.DPRHideInitialSplash();
+      if (secretGate) {
+        secretGate.classList.add('secret-gate-hidden');
+        secretGate.style.display = 'none';
+      }
+      if (!app) return;
+
+      app.removeAttribute('data-dpr-pending');
+      app.textContent = '';
+
+      var panel = document.createElement('div');
+      panel.className = 'dpr-initial-error';
+      panel.setAttribute('role', 'alert');
+
+      var title = document.createElement('div');
+      title.className = 'dpr-initial-error-title';
+      title.textContent = '页面资源加载失败';
+
+      var detail = document.createElement('div');
+      detail.className = 'dpr-initial-error-detail';
+      detail.textContent = error && error.message
+        ? error.message
+        : '本地静态资源暂时无法读取，请重新加载。';
+
+      var retry = document.createElement('button');
+      retry.type = 'button';
+      retry.className = 'dpr-initial-error-retry';
+      retry.textContent = '重新加载';
+      retry.addEventListener('click', function () {
+        window.location.reload();
+      });
+
+      panel.appendChild(title);
+      panel.appendChild(detail);
+      panel.appendChild(retry);
+      app.appendChild(panel);
+    };
+    window.DPRPrefetchDocsifyShell = function () {
+      try {
+        var hash = String((window.location && window.location.hash) || '');
+        var route = hash.replace(/^#/, '').split('?')[0] || '/';
+        route = decodeURIComponent(route).replace(/^\/+/, '');
+        var pagePath = route && route !== '/'
+          ? route
+          : 'README';
+        if (!/\.(md|html)$/i.test(pagePath)) {
+          pagePath = pagePath.replace(/\/$/, '/README') + '.md';
+        }
+        var requests = [
+          'docs/_sidebar.md',
+          'docs/' + pagePath.replace(/^\/+/, ''),
+        ].filter(function (url, index, list) {
+          return url && list.indexOf(url) === index;
+        });
+        requests.forEach(function (url) {
+          var link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'fetch';
+          link.crossOrigin = 'anonymous';
+          link.href = url;
+          link.setAttribute('data-dpr-docsify-preload', '1');
+          document.head.appendChild(link);
+        });
+      } catch {
+        // ignore
+      }
+    };
+    window.DPRPrefetchDocsifyShell();
+    document.addEventListener('dpr-docsify-ready', window.DPRHideInitialSplash);
+    window.addEventListener('load', function () {
+      window.setTimeout(function () {
+        var app = document.getElementById('app');
+        if (app && app.hasAttribute('data-dpr-pending')) return;
+        window.DPRHideInitialSplash();
+      }, 300);
+    });
+  </script>
+
+  <script>
+    (function () {
+      var DEFAULT_CDN_BASE = 'https://cdn.zwwen.online';
+      var DEFAULT_VERSION_PREFIX = 'dpr/assets';
+      var ASSET_TIMEOUT_MS = 6000;
+      var explicitBase = String(window.DPR_CDN_BASE || '').replace(/\/$/, '');
+      var disabled = String(window.DPR_DISABLE_CDN || '').toLowerCase() === '1';
+      var isLocalHost = /^(localhost|127\.0\.0\.1|::1)$/.test(String(location.hostname || '').toLowerCase());
+      var candidateBase = disabled || (isLocalHost && !explicitBase) ? '' : (explicitBase || DEFAULT_CDN_BASE);
+      var preferCdn = !!candidateBase;
+      var appAssetVersion = normalizeAssetVersion(window.DPR_APP_ASSET_VERSION);
+      var versionPrefix = normalizeVersionPrefix(window.DPR_CDN_VERSION_PREFIX || DEFAULT_VERSION_PREFIX);
+      var versionedAppCdnActive = preferCdn && !!appAssetVersion;
+      window.DPR_CDN_ACTIVE = preferCdn;
+      window.DPR_ASSET_BASE = preferCdn ? candidateBase : '';
+      window.DPR_APP_ASSET_VERSION = appAssetVersion;
+      window.DPR_VERSIONED_APP_CDN_ACTIVE = versionedAppCdnActive;
+      window.DPR_ASSET_JSON_PROMISES = window.DPR_ASSET_JSON_PROMISES || {};
+
+      function normalizePath(path) {
+        return String(path || '').replace(/^\/+/, '');
+      }
+
+      function trimSlashes(value) {
+        return String(value || '').trim().replace(/^\/+|\/+$/g, '');
+      }
+
+      function normalizeVersionPrefix(value) {
+        var text = trimSlashes(value || DEFAULT_VERSION_PREFIX);
+        if (!text || text.indexOf('..') !== -1 || !/^[A-Za-z0-9._/-]+$/.test(text)) {
+          return DEFAULT_VERSION_PREFIX;
+        }
+        return text;
+      }
+
+      function normalizeAssetVersion(value) {
+        var text = trimSlashes(value);
+        // latest/main/master 都是可变指针，会绕过 fork 的 Sync 控制，直接禁用。
+        if (!text || /^(latest|main|master)$/i.test(text)) return '';
+        if (text.indexOf('..') !== -1 || !/^[A-Za-z0-9._/-]+$/.test(text)) return '';
+        return text;
+      }
+
+      function encodePathSegments(path) {
+        return String(path || '')
+          .split('/')
+          .filter(Boolean)
+          .map(encodeURIComponent)
+          .join('/');
+      }
+
+      function localUrl(path) {
+        return normalizePath(path);
+      }
+
+      function cdnUrl(path, useVersionedPath) {
+        if (!candidateBase) return localUrl(path);
+        if (useVersionedPath && appAssetVersion) {
+          return [
+            candidateBase,
+            encodePathSegments(versionPrefix),
+            encodePathSegments(appAssetVersion),
+            normalizePath(path),
+          ].filter(Boolean).join('/');
+        }
+        return candidateBase + '/' + normalizePath(path);
+      }
+
+      function isVendorAsset(path) {
+        return /^app\/vendor\//i.test(normalizePath(path));
+      }
+
+      function isProjectAppAsset(path) {
+        var normalized = normalizePath(path);
+        return /^app\//i.test(normalized) && !isVendorAsset(normalized);
+      }
+
+      function shouldLoadAppAssetFromVersionedCdn(path, useCdn) {
+        return !!useCdn && versionedAppCdnActive && isProjectAppAsset(path);
+      }
+
+      function shouldLoadScriptFromCdn(path, useCdn) {
+        if (!useCdn) return false;
+        // 项目自有 app/*.js 只有在 fork 本地锁定了不可变版本后才走 CDN，
+        // 避免上游 latest 资源发布后绕过用户的 Sync fork 控制。
+        return isVendorAsset(path) || shouldLoadAppAssetFromVersionedCdn(path, useCdn);
+      }
+
+      function shouldLoadStylesheetFromCdn(path, useCdn) {
+        if (!useCdn) return false;
+        if (!isVendorAsset(path) && !shouldLoadAppAssetFromVersionedCdn(path, useCdn)) return false;
+        // KaTeX CSS 会继续请求 fonts/*.woff2。EdgeOne Pages 当前未给字体返回
+        // Access-Control-Allow-Origin，本地/GitHub Pages 跨域引用会被浏览器拦截。
+        return !/\/katex\.min\.css$/i.test(normalizePath(path));
+      }
+
+      function shouldLoadJsonFromCdn(path, useCdn) {
+        return !!useCdn && shouldLoadAppAssetFromVersionedCdn(path, useCdn);
+      }
+
+      function appendStylesheet(path, useCdn) {
+        return new Promise(function (resolve) {
+          var useRemoteStylesheet = shouldLoadStylesheetFromCdn(path, useCdn);
+          var finished = false;
+          var link = document.createElement('link');
+          var timer = window.setTimeout(function () {
+            if (finished) return;
+            finished = true;
+            link.remove();
+            if (useRemoteStylesheet) {
+              console.warn('[DPR] CDN CSS 加载超时，回退本地：' + path);
+              appendStylesheet(path, false).then(resolve);
+            } else {
+              resolve(false);
+            }
+          }, ASSET_TIMEOUT_MS);
+          link.rel = 'stylesheet';
+          link.href = useRemoteStylesheet
+            ? cdnUrl(path, shouldLoadAppAssetFromVersionedCdn(path, useCdn))
+            : localUrl(path);
+          link.onload = function () {
+            if (finished) return;
+            finished = true;
+            window.clearTimeout(timer);
+            resolve(true);
+          };
+          link.onerror = function () {
+            if (finished) return;
+            finished = true;
+            window.clearTimeout(timer);
+            link.remove();
+            if (useRemoteStylesheet) {
+              console.warn('[DPR] CDN CSS 加载失败，回退本地：' + path);
+              appendStylesheet(path, false).then(resolve);
+            } else {
+              resolve(false);
+            }
+          };
+          document.head.appendChild(link);
+        });
+      }
+
+      function preloadScript(path, useCdn) {
+        var useRemoteScript = shouldLoadScriptFromCdn(path, useCdn);
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'script';
+        link.href = useRemoteScript
+          ? cdnUrl(path, shouldLoadAppAssetFromVersionedCdn(path, useCdn))
+          : localUrl(path);
+        document.head.appendChild(link);
+      }
+
+      function preloadJsonAsset(path, useCdn) {
+        var key = normalizePath(path);
+        if (!key || typeof fetch !== 'function') return Promise.resolve(null);
+        if (window.DPR_ASSET_JSON_PROMISES[key]) return window.DPR_ASSET_JSON_PROMISES[key];
+
+        function requestJson(useRemoteJson) {
+          var url = useRemoteJson
+            ? cdnUrl(path, shouldLoadAppAssetFromVersionedCdn(path, useCdn))
+            : localUrl(path);
+          return fetch(url, { cache: 'force-cache' }).then(function (response) {
+            if (!response || !response.ok) {
+              throw new Error('静态 JSON 加载失败：' + path);
+            }
+            return response.json();
+          }).catch(function (err) {
+            if (useRemoteJson) {
+              console.warn('[DPR] CDN JSON 加载失败，回退本地：' + path);
+              return requestJson(false);
+            }
+            console.warn('[DPR] 静态 JSON 预取失败：' + path, err);
+            return null;
+          });
+        }
+
+        window.DPR_ASSET_JSON_PROMISES[key] = requestJson(shouldLoadJsonFromCdn(path, useCdn));
+        return window.DPR_ASSET_JSON_PROMISES[key];
+      }
+
+      function appendScript(path, useCdn, localRetryCount) {
+        return new Promise(function (resolve, reject) {
+          var useRemoteScript = shouldLoadScriptFromCdn(path, useCdn);
+          var retries = Number(localRetryCount) || 0;
+          var finished = false;
+          var script = document.createElement('script');
+          var timer = window.setTimeout(function () {
+            if (finished) return;
+            finished = true;
+            script.remove();
+            if (useRemoteScript) {
+              console.warn('[DPR] CDN JS 加载超时，回退本地：' + path);
+              appendScript(path, false, 0).then(resolve, reject);
+            } else if (retries < 1) {
+              console.warn('[DPR] 本地 JS 加载超时，重试：' + path);
+              appendScript(path, false, retries + 1).then(resolve, reject);
+            } else {
+              reject(new Error('静态脚本加载超时：' + path));
+            }
+          }, ASSET_TIMEOUT_MS);
+          script.async = false;
+          script.src = useRemoteScript
+            ? cdnUrl(path, shouldLoadAppAssetFromVersionedCdn(path, useCdn))
+            : localUrl(path);
+          if (!useRemoteScript && retries > 0) {
+            script.src += (script.src.indexOf('?') === -1 ? '?' : '&') + 'dpr_retry=' + Date.now();
+          }
+          script.onload = function () {
+            if (finished) return;
+            finished = true;
+            window.clearTimeout(timer);
+            resolve(true);
+          };
+          script.onerror = function () {
+            if (finished) return;
+            finished = true;
+            window.clearTimeout(timer);
+            script.remove();
+            if (useRemoteScript) {
+              console.warn('[DPR] CDN JS 加载失败，回退本地：' + path);
+              appendScript(path, false, 0).then(resolve, reject);
+            } else if (retries < 1) {
+              console.warn('[DPR] 本地 JS 加载失败，重试：' + path);
+              appendScript(path, false, retries + 1).then(resolve, reject);
+            } else {
+              reject(new Error('静态脚本加载失败：' + path));
+            }
+          };
+          document.head.appendChild(script);
+        });
+      }
+
+      function appendScriptsInOrder(paths, useCdn) {
+        var chain = Promise.resolve();
+        paths.forEach(function (path) {
+          chain = chain.then(function () {
+            return appendScript(path, useCdn);
+          });
+        });
+        return chain;
+      }
+
+      window.DPRLoadAssets = function (assets) {
+        var styles = [];
+        var scripts = [];
+        var jsons = [];
+        assets.forEach(function (asset) {
+          if (asset.type === 'style') styles.push(asset.path);
+          if (asset.type === 'script') scripts.push(asset.path);
+          if (asset.type === 'json') jsons.push(asset.path);
+        });
+        scripts.forEach(function (path) {
+          preloadScript(path, preferCdn);
+        });
+        jsons.forEach(function (path) {
+          preloadJsonAsset(path, preferCdn);
+        });
+        return Promise.all(styles.map(function (path) {
+          return appendStylesheet(path, preferCdn);
+        })).then(function () {
+          return appendScriptsInOrder(scripts, preferCdn);
+        });
+      };
+    })();
+  </script>
+</head>
+<body>
+  <!-- 首次进入时的密钥解锁 / 游客模式选择 -->
+  <div id="secret-gate-overlay" class="secret-gate-overlay secret-gate-hidden">
+    <div id="secret-gate-modal" class="secret-gate-modal">
+      <h2 style="margin-top:0;">🔐 解锁密钥</h2>
+      <p style="font-size:13px; color:#555; margin-bottom:8px;">
+        为保护你的大模型 API Key 等敏感配置，请输入本地密码解锁，
+        或选择以游客身份访问（仅支持阅读论文，无法使用后台面板和大模型对话）。
+      </p>
+      <label for="secret-gate-password" style="font-size:13px; color:#333; display:block; margin-bottom:4px;">
+        解锁密码（至少 8 位，包含数字、小写字母、大写字母和特殊符号）：
+      </label>
+      <input
+        id="secret-gate-password"
+        type="password"
+        autocomplete="off"
+        style="width:100%; box-sizing:border-box; padding:6px 8px; margin-bottom:6px; font-size:13px;"
+      />
+      <div id="secret-gate-error" style="min-height:18px; font-size:12px; color:#999; margin-bottom:8px;">
+        密码仅在本地用于解密，不会上传到服务器。
+      </div>
+      <div class="secret-gate-actions">
+        <button id="secret-gate-guest" type="button" class="secret-gate-btn secondary">
+          以游客身份访问
+        </button>
+        <button id="secret-gate-unlock" type="button" class="secret-gate-btn primary">
+          解锁密钥
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="dpr-initial-splash" class="dpr-initial-loading" role="status" aria-live="polite">
+    <div class="dpr-initial-loading-card">
+      <div class="dpr-initial-loading-mark" aria-hidden="true">DPR</div>
+      <div class="dpr-initial-loading-title">Daily Paper Reader</div>
+      <div class="dpr-initial-loading-subtitle">正在加载资源...</div>
+    </div>
+  </div>
+  <div id="app" data-dpr-pending>
+    <span hidden data-dpr-docsify-placeholder></span>
+  </div>
+
+  <script>
+    window.DPR_RUNTIME_SOURCE_BACKENDS = Object.assign(
+      {
+        biorxiv: {
+          enabled: true,
+        },
+        medrxiv: {
+          enabled: true,
+        },
+        chemrxiv: {
+          enabled: true,
+        },
+        neurips: {
+          enabled: true,
+        },
+        aaai: {
+          enabled: true,
+        },
+        iclr: {
+          enabled: true,
+        },
+        icml: {
+          enabled: true,
+        },
+        acl: {
+          enabled: true,
+        },
+        emnlp: {
+          enabled: true,
+        },
+      },
+      window.DPR_RUNTIME_SOURCE_BACKENDS || {},
+    );
+
+    window.DPRLoadAssets([
+      { type: 'style', path: 'app/vendor/docsify/4/lib/themes/vue.css' },
+      { type: 'style', path: 'app/app.css?v=20260922-rr65-3' },
+      { type: 'style', path: 'app/research-radar.css?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/vendor/js-yaml/4.1.0/dist/js-yaml.min.js' },
+      { type: 'script', path: 'app/llm-config-utils.js' },
+      { type: 'script', path: 'app/secret.session.js' },
+      { type: 'script', path: 'app/read-state-sync.js' },
+      { type: 'script', path: 'app/gist-share-utils.js' },
+      { type: 'script', path: 'app/zotero-meta-utils.js' },
+      { type: 'script', path: 'app/zotero-chat-utils.js' },
+      { type: 'script', path: 'app/dpr-sidebar.js' },
+      { type: 'script', path: 'app/docsify-plugin.js' },
+      { type: 'script', path: 'app/vendor/cytoscape/3.33.1/cytoscape.min.js' },
+      { type: 'script', path: 'app/research-radar-icons.js?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/research-radar-api.js?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/research-radar-state.js?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/research-radar-overview.js?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/research-radar-papers.js?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/research-radar-authors.js?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/research-radar-graph.js?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/research-radar-detail-panel.js?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/research-radar.js?v=20260922-rr65-3' },
+      { type: 'script', path: 'app/vendor/docsify/4/lib/docsify.min.js' },
+    ]).then(function () {
+      document.addEventListener('dpr-docsify-ready', function loadDeferredAssetsOnce() {
+        document.removeEventListener('dpr-docsify-ready', loadDeferredAssetsOnce);
+        // 首页统计是非关键增强，加载失败不能阻断设置、反馈等主功能。
+        window.DPRLoadAssets([
+          { type: 'script', path: 'app/site-stats.js' },
+        ]).catch(function (err) {
+          console.warn('[DPR] 首页统计加载失败：', err);
+        });
+        window.DPRLoadAssets([
+          { type: 'json', path: 'app/conference-stats.json' },
+          { type: 'style', path: 'app/vendor/katex/0.16.9/dist/katex.min.css' },
+          { type: 'script', path: 'app/vendor/katex/0.16.9/dist/katex.min.js' },
+          { type: 'script', path: 'app/vendor/katex/0.16.9/dist/contrib/auto-render.min.js' },
+          { type: 'script', path: 'app/chat.discussion.js' },
+          { type: 'script', path: 'app/subscriptions.github-token.js' },
+          { type: 'script', path: 'app/feedback.issue.js' },
+          { type: 'script', path: 'app/subscriptions.smart-query.js' },
+          { type: 'script', path: 'app/subscriptions.keywords.js' },
+          { type: 'script', path: 'app/subscriptions.zotero.js' },
+          { type: 'script', path: 'app/subscriptions.tracked-papers.js' },
+          { type: 'script', path: 'app/topic-preview.js' },
+          { type: 'script', path: 'app/topic-research.js' },
+          { type: 'script', path: 'app/topic-results.js' },
+          { type: 'script', path: 'app/subscriptions.manager.js' },
+          { type: 'script', path: 'app/workflows.runner.js' },
+          { type: 'script', path: 'app/ui.layout-and-subscriptions-entry.js' },
+        ]).then(function () {
+          if (window.SubscriptionsManager) {
+            window.SubscriptionsManager.init();
+          }
+          document.dispatchEvent(new Event('dpr-deferred-assets-ready'));
+        }).catch(function (err) {
+          console.error('[DPR] 延迟资源加载失败：', err);
+        });
+      });
+    }).catch(function (err) {
+      console.error('[DPR] 静态资源加载失败：', err);
+      window.DPRShowInitialLoadError(err);
+    });
+  </script>
+</body>
+</html>

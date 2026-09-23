@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "daily-paper-reader-research-radar"
+version = "0.5.0"
+description = "Local-first Research Radar backend for Daily Paper Reader"
+requires-python = ">=3.11"
+dependencies = [
+  "requests",
+  "python-dotenv",
+  "platformdirs",
+  "fastapi",
+  "uvicorn",
+]
+
+[project.scripts]
+research-radar = "src.research_radar.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.setuptools.package-data]
+"src.research_radar.storage.sqlite.migrations" = ["*.sql"]

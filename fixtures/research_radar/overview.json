@@ -1,0 +1,17 @@
+{
+  "demo_fixture": true,
+  "yearly_paper_counts": [
+    {"year": 2022, "count": 1},
+    {"year": 2023, "count": 2},
+    {"year": 2024, "count": 2},
+    {"year": 2025, "count": 2},
+    {"year": 2026, "count": 3}
+  ],
+  "yearly_new_author_counts": [
+    {"year": 2022, "count": 3},
+    {"year": 2023, "count": 2},
+    {"year": 2024, "count": 2},
+    {"year": 2025, "count": 2},
+    {"year": 2026, "count": 1}
+  ]
+}

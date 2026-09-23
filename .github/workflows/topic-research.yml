@@ -1,0 +1,139 @@
+name: Topic research
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile_tag:
+        description: '已保存的研究词条'
+        default: ''
+      mode:
+        description: '90 / 365 / starter'
+        default: '90'
+        type: choice
+        options: ['90', '365', 'starter']
+      as_of:
+        description: 'UTC排他截止日期 YYYY-MM-DD'
+        default: ''
+      profile_snapshot:
+        description: '仅本次研究需求的JSON快照，不包含密钥'
+        default: ''
+      conferences:
+        description: '大礼包会议名称CSV；留空使用全部支持会议'
+        default: ''
+      action:
+        description: 'run检索评分 / continue-content仅继续已有名单内容'
+        type: choice
+        options: ['run', 'continue-content']
+        default: 'run'
+      run_id:
+        description: '继续内容时的固定任务ID'
+        default: ''
+      content_batch:
+        description: '本轮新增阅读内容预算0–100，默认10'
+        default: '10'
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: topic-research-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      DPR_MODELS_REMOTE_ONLY: '1'
+      DPR_EMBED_ALLOW_LOCAL_FALLBACK: '0'
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      DEEPSEEK_BASE_URL: ${{ secrets.DEEPSEEK_BASE_URL }}
+      DEEPSEEK_MODEL: ${{ secrets.DEEPSEEK_MODEL }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      DPR_EMBED_API_URL: ${{ secrets.DPR_EMBED_API_URL || 'https://zwwen.online/embed' }}
+      DPR_EMBED_API_KEY: ${{ secrets.DPR_EMBED_API_KEY }}
+      RERANK_PROFILE: public-zwwen-rerank
+      PUBLIC_RERANK_API_BASE_URL: ${{ secrets.PUBLIC_RERANK_API_BASE_URL || 'https://zwwen.online/rerank' }}
+      PUBLIC_RERANK_API_KEY: ${{ secrets.PUBLIC_RERANK_API_KEY }}
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install cloud-only runtime
+        run: python -m pip install -r requirements.txt
+      - uses: actions/cache/restore@v5
+        with:
+          path: |
+            .local-runs/starter-pack-cache
+            .local-runs/long-range-cache
+            .local-runs/topic-research-rerank-cache
+          key: topic-research-v2-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            topic-research-v2-${{ github.ref_name }}-
+            starter-pack-v1-${{ github.ref_name }}-
+            long-range-v1-${{ github.ref_name }}-
+      - name: Research or continue fixed content
+        timeout-minutes: 95
+        env:
+          TOPIC_TAG: ${{ inputs.profile_tag }}
+          TOPIC_MODE: ${{ inputs.mode }}
+          TOPIC_AS_OF: ${{ inputs.as_of }}
+          TOPIC_SNAPSHOT: ${{ inputs.profile_snapshot }}
+          TOPIC_CONFERENCES: ${{ inputs.conferences }}
+          TOPIC_ACTION: ${{ inputs.action }}
+          TOPIC_RUN_ID: ${{ inputs.run_id }}
+          TOPIC_CONTENT_BATCH: ${{ inputs.content_batch }}
+        run: |
+          python - <<'PY'
+          import os, subprocess, sys
+          args = [sys.executable, 'src/topic_research.py']
+          for field, flag in [('TOPIC_TAG','--profile-tag'), ('TOPIC_MODE','--mode'),
+              ('TOPIC_AS_OF','--as-of'), ('TOPIC_SNAPSHOT','--profile-snapshot'),
+              ('TOPIC_CONFERENCES','--conferences'), ('TOPIC_ACTION','--action'),
+              ('TOPIC_RUN_ID','--run-id'), ('TOPIC_CONTENT_BATCH','--content-batch')]:
+              if os.environ.get(field): args.extend([flag, os.environ[field]])
+          if os.environ['GITHUB_REPOSITORY'] != 'ziwenhahaha/daily-paper-reader':
+              args.append('--publish')
+          subprocess.run(args, check=True)
+          PY
+      - uses: actions/cache/save@v5
+        if: always()
+        with:
+          path: |
+            .local-runs/starter-pack-cache
+            .local-runs/long-range-cache
+            .local-runs/topic-research-rerank-cache
+          key: topic-research-v2-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: topic-research-results
+          include-hidden-files: true
+          path: |
+            .local-runs/starter-pack-cache/runs/
+            docs/starter-pack/
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Commit fork results
+        if: success() && github.repository != 'ziwenhahaha/daily-paper-reader'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m '[update] 更新专题研究结果与论文清单' -m 'Co-Authored-By: xixi <3495302215@qq.com>'
+          git fetch origin "$GITHUB_REF_NAME"
+          git rebase "origin/$GITHUB_REF_NAME"
+          git push origin HEAD:"$GITHUB_REF_NAME"
+      - name: Verify Pages publication
+        if: success() && github.repository != 'ziwenhahaha/daily-paper-reader'
+        timeout-minutes: 12
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/request_pages_build.py --timeout 600

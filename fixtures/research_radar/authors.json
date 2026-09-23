@@ -1,0 +1,15 @@
+{
+  "demo_fixture": true,
+  "authors": [
+    {"id": "a1", "name": "Alice Morgan", "primary_institution": "Northbridge Demo University", "other_affiliations": ["Open Methods Demo Lab"], "paper_ids": ["p1", "p2", "p4", "p6", "p8"], "total_works": 38, "citation_count": 410, "first_year": 2022, "latest_year": 2026},
+    {"id": "a2", "name": "Bo Chen", "primary_institution": "Eastlake Demo Institute", "other_affiliations": [], "paper_ids": ["p1", "p2", "p5", "p8"], "total_works": 29, "citation_count": 265, "first_year": 2022, "latest_year": 2026},
+    {"id": "a3", "name": "Carmen Ruiz", "primary_institution": "Sierra Demo Research Center", "other_affiliations": [], "paper_ids": ["p1", "p3", "p6", "p10"], "total_works": 24, "citation_count": 198, "first_year": 2022, "latest_year": 2026},
+    {"id": "a4", "name": "Dev Patel", "primary_institution": "Harbor Demo University", "other_affiliations": [], "paper_ids": ["p2", "p5", "p7"], "total_works": 21, "citation_count": 143, "first_year": 2023, "latest_year": 2025},
+    {"id": "a5", "name": "Elena Rossi", "primary_institution": "Northbridge Demo University", "other_affiliations": ["Civic AI Demo Lab"], "paper_ids": ["p3", "p4", "p7"], "total_works": 19, "citation_count": 121, "first_year": 2023, "latest_year": 2025},
+    {"id": "a6", "name": "Farah Okafor", "primary_institution": "Sierra Demo Research Center", "other_affiliations": [], "paper_ids": ["p4", "p6", "p9"], "total_works": 17, "citation_count": 98, "first_year": 2024, "latest_year": 2026},
+    {"id": "a7", "name": "Grace Kim", "primary_institution": "Eastlake Demo Institute", "other_affiliations": [], "paper_ids": ["p5", "p10"], "total_works": 14, "citation_count": 77, "first_year": 2024, "latest_year": 2026},
+    {"id": "a8", "name": "Hugo Silva", "primary_institution": "Harbor Demo University", "other_affiliations": [], "paper_ids": ["p6", "p9"], "total_works": 13, "citation_count": 69, "first_year": 2025, "latest_year": 2026},
+    {"id": "a9", "name": "Iris Novak", "primary_institution": "Civic AI Demo Lab", "other_affiliations": [], "paper_ids": ["p7", "p10"], "total_works": 11, "citation_count": 54, "first_year": 2025, "latest_year": 2026},
+    {"id": "a10", "name": "Jamal Reed", "primary_institution": null, "other_affiliations": [], "paper_ids": ["p8", "p9"], "total_works": 8, "citation_count": 26, "first_year": 2026, "latest_year": 2026}
+  ]
+}

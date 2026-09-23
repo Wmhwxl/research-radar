@@ -1,0 +1,30 @@
+{
+  "demo_fixture": true,
+  "edges": [
+    {"source": "a1", "target": "a2", "shared_paper_ids": ["p1", "p2", "p8"]},
+    {"source": "a1", "target": "a3", "shared_paper_ids": ["p1", "p6"]},
+    {"source": "a2", "target": "a3", "shared_paper_ids": ["p1"]},
+    {"source": "a1", "target": "a4", "shared_paper_ids": ["p2"]},
+    {"source": "a2", "target": "a4", "shared_paper_ids": ["p2", "p5"]},
+    {"source": "a3", "target": "a5", "shared_paper_ids": ["p3"]},
+    {"source": "a1", "target": "a5", "shared_paper_ids": ["p4"]},
+    {"source": "a1", "target": "a6", "shared_paper_ids": ["p4", "p6"]},
+    {"source": "a5", "target": "a6", "shared_paper_ids": ["p4"]},
+    {"source": "a2", "target": "a7", "shared_paper_ids": ["p5"]},
+    {"source": "a4", "target": "a7", "shared_paper_ids": ["p5"]},
+    {"source": "a3", "target": "a6", "shared_paper_ids": ["p6"]},
+    {"source": "a1", "target": "a8", "shared_paper_ids": ["p6"]},
+    {"source": "a3", "target": "a8", "shared_paper_ids": ["p6"]},
+    {"source": "a6", "target": "a8", "shared_paper_ids": ["p6", "p9"]},
+    {"source": "a4", "target": "a5", "shared_paper_ids": ["p7"]},
+    {"source": "a4", "target": "a9", "shared_paper_ids": ["p7"]},
+    {"source": "a5", "target": "a9", "shared_paper_ids": ["p7"]},
+    {"source": "a1", "target": "a10", "shared_paper_ids": ["p8"]},
+    {"source": "a2", "target": "a10", "shared_paper_ids": ["p8"]},
+    {"source": "a6", "target": "a10", "shared_paper_ids": ["p9"]},
+    {"source": "a8", "target": "a10", "shared_paper_ids": ["p9"]},
+    {"source": "a3", "target": "a7", "shared_paper_ids": ["p10"]},
+    {"source": "a3", "target": "a9", "shared_paper_ids": ["p10"]},
+    {"source": "a7", "target": "a9", "shared_paper_ids": ["p10"]}
+  ]
+}

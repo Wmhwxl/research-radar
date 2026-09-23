@@ -1,0 +1,125 @@
+{
+  "demo_fixture": true,
+  "papers": [
+    {
+      "id": "p1",
+      "title": "DemoMMR: Missing-Modality Foundations for Multimodal Recommendation",
+      "authors": [{"id": "a1", "name": "Alice Morgan"}, {"id": "a2", "name": "Bo Chen"}, {"id": "a3", "name": "Carmen Ruiz"}],
+      "year": 2022,
+      "venue": "DemoRec Workshop",
+      "relevance_label": "core",
+      "relevance_score": 0.96,
+      "citation_count": 42,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p1"
+    },
+    {
+      "id": "p2",
+      "title": "DemoAlign: Cross-Modal Alignment under Partial Observation",
+      "authors": [{"id": "a1", "name": "Alice Morgan"}, {"id": "a2", "name": "Bo Chen"}, {"id": "a4", "name": "Dev Patel"}],
+      "year": 2023,
+      "venue": "Fictional Multimedia Symposium",
+      "relevance_label": "core",
+      "relevance_score": 0.91,
+      "citation_count": 31,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p2"
+    },
+    {
+      "id": "p3",
+      "title": "DemoFill: Feature Imputation for Sparse Product Media",
+      "authors": [{"id": "a3", "name": "Carmen Ruiz"}, {"id": "a5", "name": "Elena Rossi"}],
+      "year": 2023,
+      "venue": "Demo Data Mining Forum",
+      "relevance_label": "related",
+      "relevance_score": 0.72,
+      "citation_count": 18,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p3"
+    },
+    {
+      "id": "p4",
+      "title": "DemoGraph: Graph Completion for Incomplete Multimodal Items",
+      "authors": [{"id": "a1", "name": "Alice Morgan"}, {"id": "a5", "name": "Elena Rossi"}, {"id": "a6", "name": "Farah Okafor"}],
+      "year": 2024,
+      "venue": "Fictional Web Conference",
+      "relevance_label": "core",
+      "relevance_score": 0.94,
+      "citation_count": 27,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p4"
+    },
+    {
+      "id": "p5",
+      "title": "DemoRobust: Recommendation with Unavailable Visual Signals",
+      "authors": [{"id": "a2", "name": "Bo Chen"}, {"id": "a4", "name": "Dev Patel"}, {"id": "a7", "name": "Grace Kim"}],
+      "year": 2024,
+      "venue": "Demo Information Systems Journal",
+      "relevance_label": "related",
+      "relevance_score": 0.76,
+      "citation_count": 15,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p5"
+    },
+    {
+      "id": "p6",
+      "title": "DemoCausal: Causal Recovery of Missing Modalities",
+      "authors": [{"id": "a1", "name": "Alice Morgan"}, {"id": "a3", "name": "Carmen Ruiz"}, {"id": "a6", "name": "Farah Okafor"}, {"id": "a8", "name": "Hugo Silva"}],
+      "year": 2025,
+      "venue": "Fictional Machine Learning Conference",
+      "relevance_label": "core",
+      "relevance_score": 0.93,
+      "citation_count": 21,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p6"
+    },
+    {
+      "id": "p7",
+      "title": "DemoSequential: Modality-Aware Sequential Recommendation",
+      "authors": [{"id": "a4", "name": "Dev Patel"}, {"id": "a5", "name": "Elena Rossi"}, {"id": "a9", "name": "Iris Novak"}],
+      "year": 2025,
+      "venue": "Demo Recommender Systems Conference",
+      "relevance_label": "core",
+      "relevance_score": 0.88,
+      "citation_count": 12,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p7"
+    },
+    {
+      "id": "p8",
+      "title": "DemoHypergraph: Adaptive Completion for Multimodal Recommenders",
+      "authors": [{"id": "a1", "name": "Alice Morgan"}, {"id": "a2", "name": "Bo Chen"}, {"id": "a10", "name": "Jamal Reed"}],
+      "year": 2026,
+      "venue": "Fictional AI Conference",
+      "relevance_label": "core",
+      "relevance_score": 0.97,
+      "citation_count": 9,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p8"
+    },
+    {
+      "id": "p9",
+      "title": "DemoCalibration: Confidence-Aware Modality Reconstruction",
+      "authors": [{"id": "a6", "name": "Farah Okafor"}, {"id": "a8", "name": "Hugo Silva"}, {"id": "a10", "name": "Jamal Reed"}],
+      "year": 2026,
+      "venue": "Demo Neural Information Forum",
+      "relevance_label": "related",
+      "relevance_score": 0.79,
+      "citation_count": 5,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p9"
+    },
+    {
+      "id": "p10",
+      "title": "DemoRetrieval: Graph Retrieval for Robust Modality Completion",
+      "authors": [{"id": "a3", "name": "Carmen Ruiz"}, {"id": "a7", "name": "Grace Kim"}, {"id": "a9", "name": "Iris Novak"}],
+      "year": 2026,
+      "venue": "Fictional Knowledge Discovery Conference",
+      "relevance_label": "core",
+      "relevance_score": 0.9,
+      "citation_count": 7,
+      "source": "fixture",
+      "external_url": "https://example.com/research-radar-demo/p10"
+    }
+  ]
+}

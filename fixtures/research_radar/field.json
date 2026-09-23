@@ -1,0 +1,21 @@
+{
+  "demo_fixture": true,
+  "fields": [
+    {
+      "id": "fixture-field-imr",
+      "slug": "incomplete-multimodal-recommendation",
+      "name": "Incomplete Multimodal Recommendation",
+      "description": "Tracking papers, authors and collaborations across the field.",
+      "core_keywords": [
+        "multimodal recommendation",
+        "missing modality",
+        "modality completion",
+        "robust multimodal recommendation"
+      ],
+      "last_sync_at": "2026-09-22T08:30:00Z",
+      "sync_status": "completed",
+      "min_year": 2022,
+      "max_year": 2026
+    }
+  ]
+}

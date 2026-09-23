@@ -1,0 +1,8 @@
+{
+  "demo_fixture": true,
+  "collaborations": {
+    "a1--a2": {"note": "Demo collaboration with activity across the full fixture range."},
+    "a1--a6": {"note": "Demo collaboration spanning 2024 and 2025."},
+    "a6--a8": {"note": "Demo collaboration spanning 2025 and 2026."}
+  }
+}

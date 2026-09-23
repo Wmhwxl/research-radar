@@ -1,0 +1,52 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# 虚拟环境
+venv/
+.venv/
+
+# 本地数据库文件
+app/chat.db
+app/chat.db-shm
+app/chat.db-wal
+chat.db
+chat.db-shm
+chat.db-wal
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# 日志文件
+app.log
+*.log
+.local-runs/
+
+# 本地环境配置
+.env
+secret.private
+.codex/
+
+# 临时/测试文件
+test.pdf
+*.zip
+*.tar.gz
+*.egg-info/
+/build/
+/dist/
+
+# Tencent Cloud EdgeOne
+.env
+.edgeone/*
+!.edgeone/project.json
+.tef_dist/*
+deploy_edgeone.sh
+
+# 忽略 Python 缓存
+__pycache__/
+*.pyc
